@@ -58,11 +58,13 @@ def tunnel(request):
         return _do_connect(request)
     else:
         tokens = qs.split(':')
-        logger.info('tunnel %s', qs)
+        
         if len(tokens) >= 2:
             if tokens[0] == 'read':
+                logger.info('tunnel %s', qs)
                 return _do_read(request, tokens[1])
             elif tokens[0] == 'write':
+                logger.info('tunnel %s', qs)
                 return _do_write(request, tokens[1])
 
     return HttpResponse(status=400)
