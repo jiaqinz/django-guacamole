@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import logging
 import threading
 import uuid
+import re
 
 from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
@@ -23,11 +24,35 @@ pending_read_request = threading.Event()
 def index(request):
     return render(request, 'index.html', {})
 
+def isValidURL(str):
+ 
+    # Regex to check valid URL
+    regex = ("[a-zA-Z0-9@:%._\\+~#?&//=]" +
+             "{2,256}\\.[a-z]" +
+             "{2,6}\\b([-a-zA-Z0-9@:%" +
+             "._\\+~#?&//=]*)")
+     
+    # Compile the ReGex
+    p = re.compile(regex)
+ 
+    # If the string is empty
+    # return false
+    if (str == None):
+        return False
+ 
+    # Return if the string
+    # matched the ReGex
+    if(re.search(p, str)):
+        return True
+    else:
+        return False
 
 @csrf_exempt
 def tunnel(request):
     qs = request.META['QUERY_STRING']
-    logger.info('tunnel %s', qs)
+    
+    if isValidURL(qs):
+        logger.info('tunnel %s', qs)
     if qs == 'connect':
         return _do_connect(request)
     else:
