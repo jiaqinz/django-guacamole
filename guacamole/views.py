@@ -51,12 +51,14 @@ def isValidURL(str):
 def tunnel(request):
     qs = request.META['QUERY_STRING']
     
-    if isValidURL(qs):
-        logger.info('tunnel %s', qs)
+    #if isValidURL(qs):
+        #logger.info('tunnel %s', qs)
     if qs == 'connect':
+        logger.info('tunnel %s', qs)
         return _do_connect(request)
     else:
         tokens = qs.split(':')
+        logger.info('tunnel %s', qs)
         if len(tokens) >= 2:
             if tokens[0] == 'read':
                 return _do_read(request, tokens[1])
